@@ -1,0 +1,3 @@
+display.c:16:6:display_1st_2SEG	32	static
+display.c:56:6:display_2nd_2SEG	32	static
+display.c:98:6:display_TrafficLight	40	static

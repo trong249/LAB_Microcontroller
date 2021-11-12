@@ -1,0 +1,16 @@
+timer.c:15:6:setTimer0	16	static
+timer.c:19:6:timer_run0	4	static
+timer.c:25:5:flag_timer0	4	static
+timer.c:34:6:setTimer1	16	static
+timer.c:38:6:timer_run1	4	static
+timer.c:44:5:flag_timer1	4	static
+timer.c:53:6:setTimer2	16	static
+timer.c:57:6:timer_run2	4	static
+timer.c:63:5:flag_timer2	4	static
+timer.c:71:6:setTimer3	16	static
+timer.c:75:6:timer_run3	4	static
+timer.c:81:5:flag_timer3	4	static
+timer.c:89:6:setTimer_7SEG	16	static
+timer.c:93:6:timer_run_7SEG	4	static
+timer.c:101:5:flag_timer_7SEG	4	static
+timer.c:109:6:HAL_TIM_PeriodElapsedCallback	16	static
