@@ -8,6 +8,8 @@
 #ifndef SRC_SCHEDULER_H_
 #define SRC_SCHEDULER_H_
 
+#define RETURN_ERROR 0
+#define RETURN_NORMAL 1
 typedef struct {
     // Pointer to the task (must be a 'void (void)' function)
 	void ( * pTask)(void);
@@ -30,6 +32,8 @@ void SCH_Init(void);
 void SCH_Update(void);
 unsigned char SCH_Add_Task(void (* pFunction)(), unsigned int DELAY, unsigned int PERIOD);
 unsigned char SCH_Delete_Task(const int TASK_INDEX);
-void SCH_Report_Status(void);
+void SCH_Dispatch_Tasks(void);
+
+
 
 #endif /* SRC_SCHEDULER_H_ */

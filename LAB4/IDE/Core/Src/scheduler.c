@@ -5,7 +5,7 @@
  *      Author: win 10
  */
 #include "scheduler.h"
-unsigned char Error_code_G = 0;
+#define TICK     10
 /******************************************************************************************************************/
 void SCH_Init(void) {
     unsigned char i;
@@ -15,7 +15,6 @@ void SCH_Init(void) {
     // Reset the global error variable
     // - SCH_Delete_Task() will generate an error code,
     // (because the task array is empty)
-    Error_code_G = 0;
 }
 /******************************************************************************************************************/
 void SCH_Update(void){
@@ -32,39 +31,12 @@ void SCH_Update(void){
                     // Schedule periodic tasks to run again
                     SCH_tasks_G[Index].Delay = SCH_tasks_G[Index].Period;
                 }
-            } else {
+            }else {
                 // Not yet ready to run: just decrement the delay
                 SCH_tasks_G[Index].Delay -= 1;
             }
         }
     }
-}
-/******************************************************************************************************************/
-
-unsigned char SCH_Add_Task(void (* pFunction)(), unsigned int DELAY, unsigned int PERIOD)
-{
-    unsigned char Index = 0;
-    // First find a gap in the array (if there is one)
-    while ((SCH_tasks_G[Index].pTask != 0) && (Index < SCH_MAX_TASKS))
-    {
-       Index++;
-    }
-    // Have we reached the end of the list?
-    if (Index == SCH_MAX_TASKS)
-    {
-        // Task list is full
-        // Set the global error variable
-        Error_code_G = "ERROR_SCH_TOO_MANY_TASKS";
-        // Also return an error code
-        return SCH_MAX_TASKS;
-    }
-    // If we're here, there is a space in the task array
-    SCH_tasks_G[Index].pTask = pFunction;
-    SCH_tasks_G[Index].Delay = DELAY;
-    SCH_tasks_G[Index].Period = PERIOD;
-    SCH_tasks_G[Index].RunMe = 0;
-    // return position of task (to allow later deletion)
-    return Index;
 }
 /******************************************************************************************************************/
 
@@ -85,22 +57,45 @@ void SCH_Dispatch_Tasks(void)
         }
     }
     // Report system status
-    SCH_Report_Status();
     // The scheduler enters idle mode at this point
+}
+
+/******************************************************************************************************************/
+
+unsigned char SCH_Add_Task(void (* pFunction)(), unsigned int DELAY, unsigned int PERIOD)
+{
+    unsigned char Index = 0;
+    // First find a gap in the array (if there is one)
+    while ((SCH_tasks_G[Index].pTask != 0) && (Index < SCH_MAX_TASKS))
+    {
+       Index++;
+    }
+    // Have we reached the end of the list?
+    if (Index == SCH_MAX_TASKS)
+    {
+        // Task list is full
+        // Set the global error variable
+        // Also return an error code
+        return SCH_MAX_TASKS;
+    }
+    // If we're here, there is a space in the task array
+    SCH_tasks_G[Index].pTask = pFunction;
+    SCH_tasks_G[Index].Delay = DELAY;
+    SCH_tasks_G[Index].Period = PERIOD;
+    SCH_tasks_G[Index].RunMe = 0;
+    // return position of task (to allow later deletion)
+    return Index;
 }
 /******************************************************************************************************************/
 unsigned char SCH_Delete_Task(const int TASK_INDEX){
     unsigned char Return_code;
     if (SCH_tasks_G[TASK_INDEX].pTask == 0) {
         // No task at this location...
-        //
-        // Set the global error variable
-        Error_code_G = "ERROR_SCH_CANNOT_DELETE_TASK";
 
         // ...also return an error codew
-        Return_code = "RETURN_ERROR";
+        Return_code = RETURN_ERROR;
     } else {
-        Return_code = "RETURN_NORMAL";
+        Return_code = RETURN_NORMAL;
     }
     SCH_tasks_G[TASK_INDEX].pTask = 0x0000;
     SCH_tasks_G[TASK_INDEX].Delay = 0;
@@ -109,28 +104,7 @@ unsigned char SCH_Delete_Task(const int TASK_INDEX){
     return Return_code; // return status
 }
 /******************************************************************************************************************/
-void SCH_Report_Status(void) {
-#ifdef SCH_REPORT_ERRORS
-    // ONLY APPLIES IF WE ARE REPORTING ERRORS
-    // Check for a new error code
-    if (Error_code_G != Last_error_code_G) {
-        // Negative logic on LEDs assumed
-        Error_port = 255 - Error_code_G;
-        Last_error_code_G = Error_code_G;
-        if (Error_code_G != 0){
-            Error_tick_count_G = 60000;
-        } else {
-            Error_tick_count_G = 0;
-        }
-    } else {
-        if (Error_tick_count_G != 0){
-            if (--Error_tick_count_G == 0)   {
-                Error_code_G = 0; // Reset error code
-            }
-        }
-    }
-#endif
-}
+
 /******************************************************************************************************************/
 
 /******************************************************************************************************************/
