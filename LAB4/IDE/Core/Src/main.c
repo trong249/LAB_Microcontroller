@@ -100,11 +100,11 @@ int main(void)
   SCH_Init () ;
 
   /* USER CODE END 2 */
-  SCH_Add_Task(&display_1,0,500);
-  SCH_Add_Task(&display_2,100,500);
-  SCH_Add_Task(&display_3,200,500);
-  SCH_Add_Task(&display_4,300,500);
-  SCH_Add_Task(&display_5,400,500);
+  SCH_Add_Task(&display_1,0,50);
+  SCH_Add_Task(&display_2,0,100);
+  SCH_Add_Task(&display_3,0,150);
+  SCH_Add_Task(&display_4,0,200);
+  SCH_Add_Task(&display_5,0,250);
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -124,25 +124,20 @@ int main(void)
 }
 
 void display_1(){
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2|GPIO_PIN_3, 1);
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 0);
+	 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
 }
 
 void display_2(){
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_3, 1);
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, 0);
+	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
 }
 void display_3(){
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, 1);
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_2, 0);
+	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_3);
 }
 void display_4(){
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_2, 1);
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, 0);
+	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
 }
 void display_5(){
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, 1);
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_3, 0);
+	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 }
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef *htim ){
 	if( htim->Instance == TIM2 ) {
@@ -243,10 +238,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4, 1);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5, 1);
 
   /*Configure GPIO pins : PA1 PA2 PA3 PA4 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4;
+  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
